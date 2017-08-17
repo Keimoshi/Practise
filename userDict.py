@@ -2,7 +2,25 @@
 #coding:utf8
 import getpass
 import sys
-db = {}
+import os
+
+
+def load_file_from_dict(filepath):
+    with open(filepath,'r') as dict_file:
+        for line in dict_file:
+            (key,value) = line.strip().split(',')
+            db[key] = value
+    return db
+
+def save_file_as_dict():
+    try:
+        with open(filepath,'w') as dict_file:
+            for (key,value) in db.items():
+                dict_file.write('%s,%s\n' % (key,value))
+    except(KeyboardInterrupt,EOFError):
+        print "文件 %s 保存失败" % filename
+        
+
 
 def newUser():
     try:
@@ -17,7 +35,7 @@ def newUser():
         print 'The paaswords not match!'
     else:
         db[username] = password1
-
+    save_file_as_dict()
 
 def oldUser():
     try:
@@ -34,7 +52,7 @@ def oldUser():
             print "Login failed!The password is incorrect!"
 
 
-cmdDict = {'n':newUser,'o':oldUser}
+cmdDict = {'n':newUser,'o':oldUser,'s':save_file_as_dict,'r':load_file_from_dict}
 
 
 def main():
@@ -42,18 +60,28 @@ def main():
 Please input your choice:
 (N)ewUser
 (O)ldUser
+(S)avefile
+(R)eadfile
 (Q)uit
 """
     while True:
         try:
             choice = raw_input(prompt).strip()[0].lower()
         except(KeyboardInterrupt,EOFError):
-            choice = 'q'
-        if choice not in 'noq':
+            sys.exit()
+        if choice not in 'noqsr':
             continue
         if choice == 'q':
             break
         cmdDict[choice]()
+
+db = {}
+filepath = raw_input("The file path :")
+if os.path.exists(filepath):
+    load_file_from_dict(filepath)
+else:
+    print "文件  %s 不存在, 现在即将创建 %s "   % (filepath,filepath)
+    os.mknod(filepath)
 
 
 if __name__ == "__main__":
