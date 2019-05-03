@@ -4,10 +4,10 @@ import paramiko
 import csv
 import sys
 
-LogServer = raw_input("Please enter LogServer IP: ")
-#LogServer = "192.168.0.100"
-filepath = raw_input("Please enter Your IP list file:")
-#filepath = 'IP.csv'
+#LogServer = raw_input("Please enter LogServer IP: ")
+LogServer = "192.168.0.100"
+#filepath = raw_input("Please enter Your IP list file:")
+filepath = 'IP.csv'
 
 
 def init_errlogfile():
@@ -22,14 +22,14 @@ def check_version(ip,Username,Pwd):
         s.connect(hostname = ip , port = 22 , username = Username , password = Pwd,timeout = 5)
 
 
-        stdin,stdout,stderr=s.exec_command(" lsb_release -a | grep -c -e 'Red Hat' -e 'Centos' "  )
+        stdin,stdout,stderr=s.exec_command("uname -r"  )
         result = int(stdout.read())
 #        print type(result)
-#        print result
-        if result >= 1:
-            Centos_RedHat(s,ip)
-        else:
-            print "Please check your system version is Redhat/Centos ?"          
+        print result
+#        if result >= 1:
+#            Centos_RedHat(s,ip)
+#        else:
+#          print "Please check your system version is Redhat/Centos ?"          
     except paramiko.ssh_exception.AuthenticationException:
         print "The host %s  Authentication failed . " % ip
         with file("error.csv",'ab')  as f2:

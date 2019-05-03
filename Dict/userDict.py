@@ -18,7 +18,7 @@ def save_file_as_dict():
             for (key,value) in db.items():
                 dict_file.write('%s,%s\n' % (key,value))
     except(KeyboardInterrupt,EOFError):
-        print "文件 %s 保存失败" % filename
+        print "文件 %s 保存失败" % filepath
         
 
 

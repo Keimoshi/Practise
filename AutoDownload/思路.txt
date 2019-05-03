@@ -1,0 +1,46 @@
+1	补丁下载url https://www.catalog.update.microsoft.com/Search.aspx?q=KB4471318
+2 updateIDs=%5B%7B%22size%22%3A0%2C%22languages%22%3A%22%22%2C%22uidInfo%22%3A%223df43753-6cbf-40d1-9249-db8009bbbc7a%22%2C%22updateID%22%3A%223df43753-6cbf-40d1-9249-db8009bbbc7a%22%7D%5D
+#updateIDs 的值使用URL编码 ， 上面案列updateIDs解码为[{"size":0,"languages":"","uidInfo":"3df43753-6cbf-40d1-9249-db8009bbbc7a","updateID":"3df43753-6cbf-40d1-9249-db8009bbbc7a"}] ，其中uidInfo和updateID的值都在在1链接中的源码中获取
+3  获取uidInfo和updateID的值可以在1链接中的源码中使用正则来获取 ， 目前已知要获取的系统名称为
+		适用于基于 x64 的系统的 Windows Server 2008 R2 月度安全质量汇总
+		
+4	将获取的uidInfo和updateID直接利用UrlEncode编码套入updateIDs中，使用整体的URL请求直接访问下载页面
+5	进入下载页面获取源码中的downloadInformation[0].files[1].url值，直接使用url下载文件
+		
+
+
+
+
+
+
+
+
+服务器&终端：	{"familyIds":[100000010],"productIds":[239,238,285,286,567,568,662,659,28,25,11,31,142],"severityIds":[],"impactIds":[],"pageNumber":1,"pageSize":20,"includeCveNumber":false,"includeSeverity":false,"includeImpact":false,"orderBy":"publishedDate","orderByMonthly":"releaseNotesTitle","isDescending":true,"isDescendingMonthly":true,"queryText":"","isSearch":false,"filterText":"","fromPublishedDate":"12/01/2018","toPublishedDate":"12/31/2018"}
+
+
+
+pageSize：显示每页的项目
+fromPublishedDate： 开始时间
+toPublishedDate：结束时间
+familyIds：产品分类
+		100000010：Windows
+productIds： 产品
+		239 ， windows 10 1703 32位
+		238 ， windows 10 1703 64位
+		285 ， windows 10 1709 32位
+		286 ， windows 10 1709 64位
+		567 ， windows 10 1803 32位
+		568 ， windows 10 1803 64位
+		662 ， windows 10 1809 32位
+		659 ， windows 10 1809 64位
+		28  ， windows 7 sp1 32位
+		25  ， windows 7 sp1 64位
+		11  ， windows 2008 R2 SP1 64位
+		31  ， windows 2012 R2 64位
+		142 ,  windows 2016
+		
+POST值：updateIDs=%5B%7B%22size%22%3A0%2C%22languages%22%3A%22%22%2C%22uidInfo%22%3A%223df43753-6cbf-40d1-9249-db8009bbbc7a%22%2C%22updateID%22%3A%223df43753-6cbf-40d1-9249-db8009bbbc7a%22%7D%5D&updateIDsBlockedForImport=&wsusApiPresent=&contentImport=&sku=&serverName=&ssl=&portNumber=&version=
+
+所以整体的URL请求为：https://www.catalog.update.microsoft.com//DownloadDialog.aspx?updateIDs=%5B%7B%22size%22%3A0%2C%22languages%22%3A%22%22%2C%22uidInfo%22%3A%223df43753-6cbf-40d1-9249-db8009bbbc7a%22%2C%22updateID%22%3A%223df43753-6cbf-40d1-9249-db8009bbbc7a%22%7D%5D&updateIDsBlockedForImport=&wsusApiPresent=&contentImport=&sku=&serverName=&ssl=&portNumber=&version=
+
+直接的下载链接：http://download.windowsupdate.com/c/msdownload/update/software/secu/2018/12/windows6.1-kb4471318-x64_b4c39ec96309b1e457d76f2294664b9068044d38.msu
